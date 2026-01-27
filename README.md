@@ -7,6 +7,24 @@
 
 ---
 
+## What is Clippy?
+
+[Clippy](https://github.com/rust-lang/rust-clippy) is Rust's official linter—a tool that analyzes your code and catches common mistakes, suggests improvements, and enforces best practices.
+
+**Install/Update Clippy:**
+```bash
+rustup component add clippy
+```
+
+**Run it:**
+```bash
+cargo clippy
+```
+
+The lint configurations in this repo tell Clippy *which* checks to enforce and at what severity level.
+
+---
+
 ## Quick Start (4 ways to install)
 
 ### 1. Using Claude Code / Codex / Cursor (Recommended)
