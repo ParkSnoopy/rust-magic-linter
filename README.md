@@ -1,21 +1,40 @@
 # rust-magic-linter
 
-> "How to get your agents to follow Rust best practices: enforce pedantic
-> clippy lints in your Cargo.toml so that every best practice is required
-> by default." — [@notnotstorm](https://x.com/notnotstorm)
+> "How to get your agents to follow Rust best practices: enforce pedantic clippy lints in your Cargo.toml so that every best practice is required by default."
+> — [@notnotstorm](https://x.com/notnotstorm)
 
-Strict Clippy lint configurations for AI-assisted Rust development. Turn "taste" into compiler errors.
+**Strict Clippy lint configurations for AI-assisted Rust development.** Turn "taste" into compiler errors.
 
-## Why?
-
-- AI agents write code fast but make mistakes
-- Rust's static analysis catches issues at compile time
-- Strict Clippy lints = "guardrails" that teach agents the codebase rules
-- The `allow_attributes = "deny"` lint prevents AI from silencing warnings with `#[allow(...)]`
+---
 
 ## Quick Start
 
-### Option 1: Copy-paste (simplest)
+### Using Claude Code (Recommended)
+
+If you use [Claude Code](https://claude.ai/claude-code), just say:
+
+```
+Add rust-magic-linter to this project
+```
+
+Claude will ask which preset you want and set everything up.
+
+**To install the skill permanently:**
+
+```bash
+# Create skills directory if it doesn't exist
+mkdir -p ~/.claude/skills
+
+# Download the skill
+curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/skill/SKILL.md \
+  -o ~/.claude/skills/rust-magic-linter.md
+```
+
+Then use `/rust-magic-linter` or `/rust-magic-linter standard` in any Rust project.
+
+---
+
+### Copy-Paste (5 seconds)
 
 Add this to your `Cargo.toml`:
 
@@ -32,76 +51,88 @@ print_stdout = "deny"
 print_stderr = "deny"
 ```
 
-### Option 2: Download full config
+---
 
-```bash
-# Download the complete lint configuration
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/templates/cargo-lints.toml >> Cargo.toml
-
-# Optional: download clippy.toml for complexity thresholds
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/templates/clippy.toml -o clippy.toml
-```
-
-### Option 3: Shell script
+### Shell Script (interactive)
 
 ```bash
 curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/scripts/install.sh | bash
 ```
 
-Or with a specific preset:
+Or specify a preset directly:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/scripts/install.sh | bash -s -- minimal
+# Options: minimal, standard, maximum
+curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/scripts/install.sh | bash -s -- standard
 ```
 
-### Option 4: Claude Code skill
+---
 
-If you use [Claude Code](https://claude.ai/claude-code), just ask:
+### Download Full Config
 
-> "Add rust-magic-linter to this project"
+```bash
+# Get the complete lint configuration
+curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/templates/cargo-lints.toml >> Cargo.toml
+
+# Get clippy.toml for complexity thresholds
+curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/templates/clippy.toml -o clippy.toml
+```
+
+---
 
 ## Presets
 
-| Preset | Description | Use Case |
-|--------|-------------|----------|
-| **minimal** | Just panic guards (`unwrap`, `expect`, `panic`, `allow_attributes`) | Quick safety net |
-| **standard** | The viral tweet config + async safety | Most projects |
-| **maximum** | Everything at deny level (Tenex-style) | Maximum strictness |
+| Preset | What it does | Best for |
+|--------|--------------|----------|
+| **minimal** | Panic guards only: `unwrap`, `expect`, `panic`, `allow_attributes` | Quick safety net with minimal code changes |
+| **standard** | Pedantic + async safety + output control | Most projects (recommended) |
+| **maximum** | All lint groups at deny level | Maximum strictness, critical infrastructure |
 
-See the [presets/](presets/) directory for the full configurations.
+See [`presets/`](presets/) for the full configurations.
 
-## The Key Lints Explained
+---
 
-### The Guardrails (Critical for AI)
+## Why These Lints?
 
-| Lint | Level | Why |
-|------|-------|-----|
-| `unwrap_used` | deny | Forces proper error handling instead of panics |
-| `expect_used` | deny | Same as above - no hidden panics |
-| `panic` | deny | No explicit panics allowed |
-| `allow_attributes` | deny | **The "no cheating" rule** - AI can't silence warnings |
-| `dbg_macro` | deny | No debug leftovers in production |
-| `todo` | deny | No incomplete code |
+### The "No Cheating" Rule
+
+```toml
+allow_attributes = "deny"
+```
+
+This is the key insight: AI agents often bypass errors by adding `#[allow(clippy::...)]`. This lint makes that impossible—the AI must actually fix the code.
+
+### Panic Prevention
+
+| Lint | Why |
+|------|-----|
+| `unwrap_used` | Forces `?` or explicit error handling instead of panics |
+| `expect_used` | Same—no hidden panics |
+| `panic` | No explicit `panic!()` calls |
+| `panic_in_result_fn` | Functions returning `Result` shouldn't panic internally |
 
 ### Async Safety
 
-| Lint | Level | Why |
-|------|-------|-----|
-| `await_holding_lock` | deny | Prevents deadlocks when holding locks across `.await` |
-| `large_futures` | warn | Catches huge stack allocations in async code |
+| Lint | Why |
+|------|-----|
+| `await_holding_lock` | Prevents deadlocks when holding `MutexGuard` across `.await` |
+| `large_futures` | Catches huge stack allocations in async code |
 
-### Output Control
+### Code Hygiene
 
-| Lint | Level | Why |
-|------|-------|-----|
-| `print_stdout` | deny | Use `tracing` for structured logging |
-| `print_stderr` | deny | Same - proper logging over println debugging |
+| Lint | Why |
+|------|-----|
+| `dbg_macro` | No debug leftovers |
+| `todo` | No incomplete code markers |
+| `print_stdout` | Use `tracing`, not `println!` |
 
-## Additional Configuration
+---
+
+## Additional Files
 
 ### clippy.toml
 
-Put this in your project root to set complexity thresholds:
+Complexity thresholds (put in project root):
 
 ```toml
 cognitive-complexity-threshold = 15
@@ -110,58 +141,58 @@ too-many-lines-threshold = 100
 doc-valid-idents = ["LLM", "AI", "API", "CLI", "TUI", "AST", "MCP"]
 ```
 
-### cargo-deny (supply chain security)
+### .cargo/deny.toml
 
-Put `deny.toml` in `.cargo/` to prevent problematic dependencies:
+Supply chain security with [cargo-deny](https://github.com/EmbarkStudios/cargo-deny):
 
 ```toml
 [licenses]
 allow = ["MIT", "Apache-2.0", "BSD-3-Clause", "ISC", "Zlib", "CC0-1.0"]
 
 [bans]
-multiple-versions = "warn"
 wildcards = "deny"
 
 [advisories]
 vulnerability = "deny"
-unmaintained = "warn"
 ```
 
-## The Three Breakthrough Patterns
+### CONSTITUTION.md
 
-This project analyzed 7 repositories using strict linting for AI development. Key discoveries:
+A markdown file defining immutable laws for your codebase—AI reads it once and respects it as "supreme law". See [`templates/CONSTITUTION.md`](templates/CONSTITUTION.md).
 
-### 1. The Constitution Pattern
+---
 
-Create a `CONSTITUTION.md` defining immutable laws for your codebase. AI reads it once and respects it. See [templates/CONSTITUTION.md](templates/CONSTITUTION.md).
+## The Philosophy
 
-### 2. The "No Cheating" Lint
+> "Coding in Rust means that the agents can't sneeze without being smacked in the face by the compiler."
+> — [@Mockapapella](https://x.com/Mockapapella)
 
-```toml
-allow_attributes = "deny"
-```
+**The future of AI coding is not about making AI smarter—it's about making the environment smarter.** Strict linting turns "taste" into compiler errors, letting AI agents learn the rails through fast feedback loops.
 
-This single line prevents AI from bypassing errors with `#[allow(clippy::...)]`.
+This project analyzed 7 repositories using strict linting for AI development and extracted the best patterns:
 
-### 3. Worktree Isolation
+1. **The Constitution Pattern** — Codify laws, not just lints
+2. **The "No Cheating" Lint** — `allow_attributes = "deny"`
+3. **Worktree Isolation** — Safe sandboxing with `git worktree`
 
-Use `git worktree` to give each agent its own filesystem sandbox - destructive commands can't affect the main repo.
+---
 
-## Credits & Research
+## Credits
 
-This project is based on analysis of lint configurations from leading AI-assisted Rust projects:
+Based on analysis of lint configurations from:
 
-- [@notnotstorm](https://x.com/notnotstorm) - The original viral tweet
-- [OpenAgentsInc/openagents](https://github.com/OpenAgentsInc/openagents) - DSPy in Rust, async safety lints
-- [Mockapapella/tenex](https://github.com/Mockapapella/tenex) - Maximum strictness, worktree isolation
-- [john-agentic-ai-tools/crush](https://github.com/john-agentic-ai-tools/crush) - Constitution pattern
-- [deltartificial/cawd](https://github.com/deltartificial/cawd) - The "no cheating" lint
-- [djinn09/CytoScnPy](https://github.com/djinn09/CytoScnPy) - MCP integration, complexity thresholds
-- [mkroman/zeta](https://github.com/mkroman/zeta) - Balanced pedantic config
-- [danthedaniel/BF-JIT](https://github.com/danthedaniel/BF-JIT) - AI-written safe wrappers
+- [OpenAgentsInc/openagents](https://github.com/OpenAgentsInc/openagents) — Async safety lints
+- [Mockapapella/tenex](https://github.com/Mockapapella/tenex) — Maximum strictness
+- [john-agentic-ai-tools/crush](https://github.com/john-agentic-ai-tools/crush) — Constitution pattern
+- [deltartificial/cawd](https://github.com/deltartificial/cawd) — The "no cheating" lint
+- [djinn09/CytoScnPy](https://github.com/djinn09/CytoScnPy) — Complexity thresholds
+- [mkroman/zeta](https://github.com/mkroman/zeta) — Balanced pedantic config
+- [danthedaniel/BF-JIT](https://github.com/danthedaniel/BF-JIT) — AI-written safe wrappers
 
-See [docs/CREDITS.md](docs/CREDITS.md) for full attribution and [docs/ANALYSIS.md](docs/ANALYSIS.md) for the complete research.
+See [`docs/CREDITS.md`](docs/CREDITS.md) for full attribution and [`docs/ANALYSIS.md`](docs/ANALYSIS.md) for the complete research.
+
+---
 
 ## License
 
-MIT - See [LICENSE](LICENSE)
+MIT — See [LICENSE](LICENSE)
