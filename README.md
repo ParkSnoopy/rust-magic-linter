@@ -7,9 +7,9 @@
 
 ---
 
-## Quick Start
+## Quick Start (4 ways to install)
 
-### Using Claude Code / Codex / Cursor (Recommended)
+### 1. Using Claude Code / Codex / Cursor (Recommended)
 
 **Install the skill** (one-time setup):
 
@@ -30,7 +30,7 @@ Or just say "Add rust-magic-linter to this project" and it will ask which preset
 
 ---
 
-### Copy-Paste (5 seconds)
+### 2. Copy-Paste (5 seconds)
 
 Add this to your `Cargo.toml`:
 
@@ -49,7 +49,7 @@ print_stderr = "deny"
 
 ---
 
-### Shell Script (interactive)
+### 3. Shell Script (interactive)
 
 ```bash
 curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/scripts/install.sh | bash
@@ -64,7 +64,7 @@ curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/scri
 
 ---
 
-### Download Config Directly
+### 4. Download Config Directly
 
 ```bash
 # Get the standard preset
@@ -78,11 +78,13 @@ curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/skil
 
 ## Presets
 
-| Preset | What it does | Best for |
-|--------|--------------|----------|
-| **minimal** | Panic guards only: `unwrap`, `expect`, `panic`, `allow_attributes` | Quick safety net, minimal code changes |
-| **standard** | Pedantic + async safety + output control | Most projects (recommended) |
-| **maximum** | All lint groups at deny level | Maximum strictness, critical infrastructure |
+
+| Preset       | What it does                                                       | Best for                                    |
+| ------------ | ------------------------------------------------------------------ | ------------------------------------------- |
+| **minimal**  | Panic guards only: `unwrap`, `expect`, `panic`, `allow_attributes` | Quick safety net, minimal code changes      |
+| **standard** | Pedantic + async safety + output control                           | Most projects (recommended)                 |
+| **maximum**  | All lint groups at deny level                                      | Maximum strictness, critical infrastructure |
+
 
 See [`skills/rust-magic-linter/assets/`](skills/rust-magic-linter/assets/) for the full configurations.
 
@@ -102,27 +104,33 @@ This is the key insight: AI agents often bypass errors by adding `#[allow(clippy
 
 ### Panic Prevention
 
-| Lint | Why |
-|------|-----|
-| `unwrap_used` | Forces `?` or explicit error handling instead of panics |
-| `expect_used` | Same—no hidden panics |
-| `panic` | No explicit `panic!()` calls |
+
+| Lint                 | Why                                                     |
+| -------------------- | ------------------------------------------------------- |
+| `unwrap_used`        | Forces `?` or explicit error handling instead of panics |
+| `expect_used`        | Same—no hidden panics                                   |
+| `panic`              | No explicit `panic!()` calls                            |
 | `panic_in_result_fn` | Functions returning `Result` shouldn't panic internally |
+
 
 ### Async Safety
 
-| Lint | Why |
-|------|-----|
+
+| Lint                 | Why                                                          |
+| -------------------- | ------------------------------------------------------------ |
 | `await_holding_lock` | Prevents deadlocks when holding `MutexGuard` across `.await` |
-| `large_futures` | Catches huge stack allocations in async code |
+| `large_futures`      | Catches huge stack allocations in async code                 |
+
 
 ### Code Hygiene
 
-| Lint | Why |
-|------|-----|
-| `dbg_macro` | No debug leftovers |
-| `todo` | No incomplete code markers |
+
+| Lint           | Why                           |
+| -------------- | ----------------------------- |
+| `dbg_macro`    | No debug leftovers            |
+| `todo`         | No incomplete code markers    |
 | `print_stdout` | Use `tracing`, not `println!` |
+
 
 ---
 
@@ -187,7 +195,7 @@ Based on analysis of lint configurations from:
 - [mkroman/zeta](https://github.com/mkroman/zeta) — Balanced pedantic config
 - [danthedaniel/BF-JIT](https://github.com/danthedaniel/BF-JIT) — AI-written safe wrappers
 
-See [`docs/CREDITS.md`](docs/CREDITS.md) for full attribution and [`docs/ANALYSIS.md`](docs/ANALYSIS.md) for the complete research.
+See [`docs/CREDITS.md`](docs/CREDITS.md) for full attribution, [`docs/ANALYSIS.md`](docs/ANALYSIS.md) for the complete research of how these repos work with AI, and [`docs/COMPARISON.md`](docs/COMPARISON.md) for a lint-by-lint comparison.
 
 ---
 
