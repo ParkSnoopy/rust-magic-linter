@@ -61,14 +61,14 @@ print_stderr = "deny"
 ### Shell Script (interactive)
 
 ```bash
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/scripts/install.sh | bash
+curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/scripts/install.sh | bash
 ```
 
 Or specify a preset directly:
 
 ```bash
 # Options: minimal, standard, maximum
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/scripts/install.sh | bash -s -- standard
+curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/scripts/install.sh | bash -s -- standard
 ```
 
 ---
@@ -77,10 +77,10 @@ curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/script
 
 ```bash
 # Get the complete lint configuration
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/skills/rust-magic-linter/assets/standard.toml >> Cargo.toml
+curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/skills/rust-magic-linter/assets/standard.toml >> Cargo.toml
 
 # Get clippy.toml for complexity thresholds
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/skills/rust-magic-linter/assets/clippy.toml -o clippy.toml
+curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/skills/rust-magic-linter/assets/clippy.toml -o clippy.toml
 ```
 
 ---

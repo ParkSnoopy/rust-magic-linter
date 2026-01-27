@@ -13,7 +13,7 @@
 set -e
 
 PRESET="${1:-standard}"
-REPO_URL="https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main"
+REPO_URL="https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master"
 
 # Colors for output
 RED='\033[0;31m'
