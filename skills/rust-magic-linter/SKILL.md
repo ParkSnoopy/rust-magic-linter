@@ -1,6 +1,6 @@
 ---
 name: rust-magic-linter
-description: Add strict Clippy lint configurations to Rust projects for AI-assisted development. Use when the user wants to add Clippy lints, AI guardrails, or rust-magic-linter to a Rust project. Supports four presets (minimal, standard, complete, maximum) that enforce best practices and prevent common AI coding mistakes like using unwrap(), silencing warnings with #[allow()], or leaving debug code.
+description: Add strict Clippy lint configurations to Rust projects for AI-assisted development. Use when the user wants to add Clippy lints, AI guardrails, or rust-magic-linter to a Rust project. Supports three presets (minimal, standard, maximum) that enforce best practices and prevent common AI coding mistakes like using unwrap(), silencing warnings with #[allow()], or leaving debug code.
 ---
 
 # Rust Magic Linter
@@ -22,7 +22,6 @@ Add strict Clippy lint configurations to Rust projects. These "guardrails" help 
 
 - **minimal** - Just panic guards: `unwrap`, `expect`, `panic`, `allow_attributes`, `dbg_macro`, `todo`. Use for quick safety net with minimal code changes.
 - **standard** - Pedantic + async safety + output control. Recommended for most projects.
-- **complete** - Full config with `[lints.rust]`, `[lints.rustdoc]`, all clippy groups, and extensive relaxations. Comprehensive but practical.
 - **maximum** - All lint groups at deny level, minimal relaxations. Very strict, may require significant code changes.
 
 ## Assets
@@ -31,7 +30,6 @@ All configuration files are in `assets/`:
 
 - `assets/minimal.toml` - Minimal preset
 - `assets/standard.toml` - Standard preset (recommended)
-- `assets/complete.toml` - Complete preset (comprehensive but practical)
 - `assets/maximum.toml` - Maximum preset (strictest)
 - `assets/clippy.toml` - Complexity thresholds for project root
 - `assets/deny.toml` - cargo-deny config for `.cargo/deny.toml`

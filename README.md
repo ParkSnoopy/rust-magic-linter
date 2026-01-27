@@ -9,24 +9,15 @@
 
 ## Quick Start
 
-### Using Claude Code (Recommended)
+### Using Claude Code / Codex / Cursor (Recommended)
 
-**First, install the skill** (one-time setup):
-
-```
-Install rust-magic-linter skill from github vicnaum/rust-magic-linter
-```
-
-Or manually:
+**Install the skill** (one-time setup):
 
 ```bash
-# Clone the skill to your skills directory
-git clone --depth 1 --filter=blob:none --sparse \
-  https://github.com/vicnaum/rust-magic-linter.git /tmp/rml && \
-  cd /tmp/rml && git sparse-checkout set skills/rust-magic-linter && \
-  mkdir -p ~/.claude/skills && \
-  cp -r skills/rust-magic-linter ~/.claude/skills/ && \
-  rm -rf /tmp/rml
+git clone https://github.com/vicnaum/rust-magic-linter.git
+cp -r rust-magic-linter/skills/rust-magic-linter ~/.claude/skills/
+# For Codex: ~/.codex/skills/
+# For Cursor: ~/.cursor/skills/
 ```
 
 **Then use it in any Rust project:**
@@ -35,7 +26,7 @@ git clone --depth 1 --filter=blob:none --sparse \
 /rust-magic-linter standard
 ```
 
-Or just say "Add rust-magic-linter to this project" and Claude will ask which preset you want.
+Or just say "Add rust-magic-linter to this project" and it will ask which preset you want.
 
 ---
 
@@ -73,10 +64,10 @@ curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/scri
 
 ---
 
-### Download Full Config
+### Download Config Directly
 
 ```bash
-# Get the complete lint configuration
+# Get the standard preset
 curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/skills/rust-magic-linter/assets/standard.toml >> Cargo.toml
 
 # Get clippy.toml for complexity thresholds
@@ -87,16 +78,15 @@ curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/skil
 
 ## Presets
 
-
-| Preset       | What it does                                                       | Best for                                    |
-| ------------ | ------------------------------------------------------------------ | ------------------------------------------- |
-| **minimal**  | Panic guards only: `unwrap`, `expect`, `panic`, `allow_attributes` | Quick safety net with minimal code changes  |
-| **standard** | Pedantic + async safety + output control                           | Most projects (recommended)                 |
-| **complete** | Full config with `[lints.rust]`, all groups, extensive relaxations | Comprehensive but practical                 |
-| **maximum**  | All lint groups at deny level, minimal relaxations                 | Maximum strictness, critical infrastructure |
-
+| Preset | What it does | Best for |
+|--------|--------------|----------|
+| **minimal** | Panic guards only: `unwrap`, `expect`, `panic`, `allow_attributes` | Quick safety net, minimal code changes |
+| **standard** | Pedantic + async safety + output control | Most projects (recommended) |
+| **maximum** | All lint groups at deny level | Maximum strictness, critical infrastructure |
 
 See [`skills/rust-magic-linter/assets/`](skills/rust-magic-linter/assets/) for the full configurations.
+
+For a fully documented reference config with explanations of every lint, see [`docs/cargo-lints-reference.toml`](docs/cargo-lints-reference.toml).
 
 ---
 
@@ -112,33 +102,27 @@ This is the key insight: AI agents often bypass errors by adding `#[allow(clippy
 
 ### Panic Prevention
 
-
-| Lint                 | Why                                                     |
-| -------------------- | ------------------------------------------------------- |
-| `unwrap_used`        | Forces `?` or explicit error handling instead of panics |
-| `expect_used`        | Same—no hidden panics                                   |
-| `panic`              | No explicit `panic!()` calls                            |
+| Lint | Why |
+|------|-----|
+| `unwrap_used` | Forces `?` or explicit error handling instead of panics |
+| `expect_used` | Same—no hidden panics |
+| `panic` | No explicit `panic!()` calls |
 | `panic_in_result_fn` | Functions returning `Result` shouldn't panic internally |
-
 
 ### Async Safety
 
-
-| Lint                 | Why                                                          |
-| -------------------- | ------------------------------------------------------------ |
+| Lint | Why |
+|------|-----|
 | `await_holding_lock` | Prevents deadlocks when holding `MutexGuard` across `.await` |
-| `large_futures`      | Catches huge stack allocations in async code                 |
-
+| `large_futures` | Catches huge stack allocations in async code |
 
 ### Code Hygiene
 
-
-| Lint           | Why                           |
-| -------------- | ----------------------------- |
-| `dbg_macro`    | No debug leftovers            |
-| `todo`         | No incomplete code markers    |
+| Lint | Why |
+|------|-----|
+| `dbg_macro` | No debug leftovers |
+| `todo` | No incomplete code markers |
 | `print_stdout` | Use `tracing`, not `println!` |
-
 
 ---
 

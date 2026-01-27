@@ -41,12 +41,12 @@ fi
 
 # Validate preset
 case "$PRESET" in
-    minimal|standard|complete|maximum)
+    minimal|standard|maximum)
         echo_info "Using preset: $PRESET"
         ;;
     *)
         echo_error "Invalid preset: $PRESET"
-        echo "Valid presets: minimal, standard, complete, maximum"
+        echo "Valid presets: minimal, standard, maximum"
         exit 1
         ;;
 esac
