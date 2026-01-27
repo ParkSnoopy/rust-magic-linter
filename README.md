@@ -11,26 +11,31 @@
 
 ### Using Claude Code (Recommended)
 
-If you use [Claude Code](https://claude.ai/claude-code), just say:
+**First, install the skill** (one-time setup):
 
 ```
-Add rust-magic-linter to this project
+Install rust-magic-linter skill from vicnaum/rust-magic-linter
 ```
 
-Claude will ask which preset you want and set everything up.
-
-**To install the skill permanently:**
+Or manually:
 
 ```bash
-# Create skills directory if it doesn't exist
-mkdir -p ~/.claude/skills
-
-# Download the skill
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/skill/SKILL.md \
-  -o ~/.claude/skills/rust-magic-linter.md
+# Clone the skill to your skills directory
+git clone --depth 1 --filter=blob:none --sparse \
+  https://github.com/vicnaum/rust-magic-linter.git /tmp/rml && \
+  cd /tmp/rml && git sparse-checkout set skill/rust-magic-linter && \
+  mkdir -p ~/.claude/skills && \
+  cp -r skill/rust-magic-linter ~/.claude/skills/ && \
+  rm -rf /tmp/rml
 ```
 
-Then use `/rust-magic-linter` or `/rust-magic-linter standard` in any Rust project.
+**Then use it in any Rust project:**
+
+```
+/rust-magic-linter standard
+```
+
+Or just say "Add rust-magic-linter to this project" and Claude will ask which preset you want.
 
 ---
 
