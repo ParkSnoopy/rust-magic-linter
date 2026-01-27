@@ -14,7 +14,7 @@
 **First, install the skill** (one-time setup):
 
 ```
-Install rust-magic-linter skill from vicnaum/rust-magic-linter
+Install rust-magic-linter skill from github vicnaum/rust-magic-linter
 ```
 
 Or manually:
@@ -23,9 +23,9 @@ Or manually:
 # Clone the skill to your skills directory
 git clone --depth 1 --filter=blob:none --sparse \
   https://github.com/vicnaum/rust-magic-linter.git /tmp/rml && \
-  cd /tmp/rml && git sparse-checkout set skill/rust-magic-linter && \
+  cd /tmp/rml && git sparse-checkout set skills/rust-magic-linter && \
   mkdir -p ~/.claude/skills && \
-  cp -r skill/rust-magic-linter ~/.claude/skills/ && \
+  cp -r skills/rust-magic-linter ~/.claude/skills/ && \
   rm -rf /tmp/rml
 ```
 
@@ -77,23 +77,25 @@ curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/script
 
 ```bash
 # Get the complete lint configuration
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/templates/cargo-lints.toml >> Cargo.toml
+curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/skills/rust-magic-linter/assets/standard.toml >> Cargo.toml
 
 # Get clippy.toml for complexity thresholds
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/templates/clippy.toml -o clippy.toml
+curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/skills/rust-magic-linter/assets/clippy.toml -o clippy.toml
 ```
 
 ---
 
 ## Presets
 
-| Preset | What it does | Best for |
-|--------|--------------|----------|
-| **minimal** | Panic guards only: `unwrap`, `expect`, `panic`, `allow_attributes` | Quick safety net with minimal code changes |
-| **standard** | Pedantic + async safety + output control | Most projects (recommended) |
-| **maximum** | All lint groups at deny level | Maximum strictness, critical infrastructure |
 
-See [`presets/`](presets/) for the full configurations.
+| Preset       | What it does                                                       | Best for                                    |
+| ------------ | ------------------------------------------------------------------ | ------------------------------------------- |
+| **minimal**  | Panic guards only: `unwrap`, `expect`, `panic`, `allow_attributes` | Quick safety net with minimal code changes  |
+| **standard** | Pedantic + async safety + output control                           | Most projects (recommended)                 |
+| **maximum**  | All lint groups at deny level                                      | Maximum strictness, critical infrastructure |
+
+
+See `[skills/rust-magic-linter/assets/](skills/rust-magic-linter/assets/)` for the full configurations.
 
 ---
 
@@ -109,27 +111,33 @@ This is the key insight: AI agents often bypass errors by adding `#[allow(clippy
 
 ### Panic Prevention
 
-| Lint | Why |
-|------|-----|
-| `unwrap_used` | Forces `?` or explicit error handling instead of panics |
-| `expect_used` | Same—no hidden panics |
-| `panic` | No explicit `panic!()` calls |
+
+| Lint                 | Why                                                     |
+| -------------------- | ------------------------------------------------------- |
+| `unwrap_used`        | Forces `?` or explicit error handling instead of panics |
+| `expect_used`        | Same—no hidden panics                                   |
+| `panic`              | No explicit `panic!()` calls                            |
 | `panic_in_result_fn` | Functions returning `Result` shouldn't panic internally |
+
 
 ### Async Safety
 
-| Lint | Why |
-|------|-----|
+
+| Lint                 | Why                                                          |
+| -------------------- | ------------------------------------------------------------ |
 | `await_holding_lock` | Prevents deadlocks when holding `MutexGuard` across `.await` |
-| `large_futures` | Catches huge stack allocations in async code |
+| `large_futures`      | Catches huge stack allocations in async code                 |
+
 
 ### Code Hygiene
 
-| Lint | Why |
-|------|-----|
-| `dbg_macro` | No debug leftovers |
-| `todo` | No incomplete code markers |
+
+| Lint           | Why                           |
+| -------------- | ----------------------------- |
+| `dbg_macro`    | No debug leftovers            |
+| `todo`         | No incomplete code markers    |
 | `print_stdout` | Use `tracing`, not `println!` |
+
 
 ---
 
@@ -163,7 +171,7 @@ vulnerability = "deny"
 
 ### CONSTITUTION.md
 
-A markdown file defining immutable laws for your codebase—AI reads it once and respects it as "supreme law". See [`templates/CONSTITUTION.md`](templates/CONSTITUTION.md).
+A markdown file defining immutable laws for your codebase—AI reads it once and respects it as "supreme law". See `[skills/rust-magic-linter/assets/CONSTITUTION.md](skills/rust-magic-linter/assets/CONSTITUTION.md)`.
 
 ---
 
@@ -194,7 +202,7 @@ Based on analysis of lint configurations from:
 - [mkroman/zeta](https://github.com/mkroman/zeta) — Balanced pedantic config
 - [danthedaniel/BF-JIT](https://github.com/danthedaniel/BF-JIT) — AI-written safe wrappers
 
-See [`docs/CREDITS.md`](docs/CREDITS.md) for full attribution and [`docs/ANALYSIS.md`](docs/ANALYSIS.md) for the complete research.
+See `[docs/CREDITS.md](docs/CREDITS.md)` for full attribution and `[docs/ANALYSIS.md](docs/ANALYSIS.md)` for the complete research.
 
 ---
 

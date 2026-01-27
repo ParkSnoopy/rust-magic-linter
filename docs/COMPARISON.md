@@ -159,4 +159,4 @@ rust-magic-linter's `standard` preset combines the best of both:
 - Tenex's comprehensive lint groups
 - Carefully curated relaxations for practical use
 
-See [templates/cargo-lints.toml](../templates/cargo-lints.toml) for the complete configuration.
+See [skills/rust-magic-linter/assets/](../skills/rust-magic-linter/assets/) for the complete configurations.

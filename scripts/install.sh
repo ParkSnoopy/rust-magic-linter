@@ -71,7 +71,7 @@ fi
 
 # Download the preset
 echo_info "Downloading $PRESET preset..."
-PRESET_CONTENT=$(curl -sL "$REPO_URL/presets/$PRESET.toml")
+PRESET_CONTENT=$(curl -sL "$REPO_URL/skills/rust-magic-linter/assets/$PRESET.toml")
 
 if [ -z "$PRESET_CONTENT" ]; then
     echo_error "Failed to download preset. Check your internet connection."
@@ -96,7 +96,7 @@ echo_info "Added lint configuration to Cargo.toml"
 # Create clippy.toml if it doesn't exist
 if [ ! -f "clippy.toml" ]; then
     echo_info "Creating clippy.toml..."
-    curl -sL "$REPO_URL/templates/clippy.toml" -o clippy.toml
+    curl -sL "$REPO_URL/skills/rust-magic-linter/assets/clippy.toml" -o clippy.toml
     echo_info "Created clippy.toml"
 else
     echo_warn "clippy.toml already exists, skipping"
@@ -107,7 +107,7 @@ read -p "Create .cargo/deny.toml for supply chain security? (y/N) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     mkdir -p .cargo
-    curl -sL "$REPO_URL/templates/deny.toml" -o .cargo/deny.toml
+    curl -sL "$REPO_URL/skills/rust-magic-linter/assets/deny.toml" -o .cargo/deny.toml
     echo_info "Created .cargo/deny.toml"
     echo_info "Run 'cargo deny check' to verify dependencies (requires cargo-deny)"
 fi
@@ -117,7 +117,7 @@ read -p "Create CONSTITUTION.md template? (y/N) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     if [ ! -f "CONSTITUTION.md" ]; then
-        curl -sL "$REPO_URL/templates/CONSTITUTION.md" -o CONSTITUTION.md
+        curl -sL "$REPO_URL/skills/rust-magic-linter/assets/CONSTITUTION.md" -o CONSTITUTION.md
         echo_info "Created CONSTITUTION.md - customize it for your project!"
     else
         echo_warn "CONSTITUTION.md already exists, skipping"
