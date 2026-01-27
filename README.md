@@ -92,10 +92,11 @@ curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/main/skills
 | ------------ | ------------------------------------------------------------------ | ------------------------------------------- |
 | **minimal**  | Panic guards only: `unwrap`, `expect`, `panic`, `allow_attributes` | Quick safety net with minimal code changes  |
 | **standard** | Pedantic + async safety + output control                           | Most projects (recommended)                 |
-| **maximum**  | All lint groups at deny level                                      | Maximum strictness, critical infrastructure |
+| **complete** | Full config with `[lints.rust]`, all groups, extensive relaxations | Comprehensive but practical                 |
+| **maximum**  | All lint groups at deny level, minimal relaxations                 | Maximum strictness, critical infrastructure |
 
 
-See `[skills/rust-magic-linter/assets/](skills/rust-magic-linter/assets/)` for the full configurations.
+See [`skills/rust-magic-linter/assets/`](skills/rust-magic-linter/assets/) for the full configurations.
 
 ---
 
@@ -171,7 +172,7 @@ vulnerability = "deny"
 
 ### CONSTITUTION.md
 
-A markdown file defining immutable laws for your codebase—AI reads it once and respects it as "supreme law". See `[skills/rust-magic-linter/assets/CONSTITUTION.md](skills/rust-magic-linter/assets/CONSTITUTION.md)`.
+A markdown file defining immutable laws for your codebase—AI reads it once and respects it as "supreme law". See [`skills/rust-magic-linter/assets/CONSTITUTION.md`](skills/rust-magic-linter/assets/CONSTITUTION.md).
 
 ---
 
@@ -202,7 +203,7 @@ Based on analysis of lint configurations from:
 - [mkroman/zeta](https://github.com/mkroman/zeta) — Balanced pedantic config
 - [danthedaniel/BF-JIT](https://github.com/danthedaniel/BF-JIT) — AI-written safe wrappers
 
-See `[docs/CREDITS.md](docs/CREDITS.md)` for full attribution and `[docs/ANALYSIS.md](docs/ANALYSIS.md)` for the complete research.
+See [`docs/CREDITS.md`](docs/CREDITS.md) for full attribution and [`docs/ANALYSIS.md`](docs/ANALYSIS.md) for the complete research.
 
 ---
 

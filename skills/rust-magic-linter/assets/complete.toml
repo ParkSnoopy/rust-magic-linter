@@ -1,0 +1,134 @@
+# ============================================
+# RUST-MAGIC-LINTER: Complete Lint Configuration
+# ============================================
+# Add this entire section to your Cargo.toml
+# For workspace projects, use [workspace.lints.*] instead
+#
+# Based on analysis of 7 AI-assisted Rust projects
+# https://github.com/vicnaum/rust-magic-linter
+
+# ============================================
+# RUST LINTS
+# ============================================
+[lints.rust]
+# Safety - forbid means even #![allow(...)] can't override
+unsafe_code = "forbid"              # No unsafe anywhere (relax if needed)
+non_ascii_idents = "forbid"         # Prevent homoglyph attacks
+
+# Quality enforcement - warnings become errors
+warnings = "deny"
+rust_2018_idioms = { level = "deny", priority = -1 }
+future_incompatible = { level = "deny", priority = -1 }
+nonstandard_style = { level = "deny", priority = -1 }
+
+# Documentation (use "deny" for libraries, "warn" for apps)
+missing_docs = "warn"
+missing_debug_implementations = "warn"
+
+[lints.rustdoc]
+all = { level = "warn", priority = -1 }
+
+# ============================================
+# CLIPPY LINTS
+# ============================================
+[lints.clippy]
+# === LINT GROUPS ===
+# Priority -1 means individual lints below can override these groups
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "warn", priority = -1 }   # warn not deny - some false positives
+cargo = { level = "warn", priority = -1 }
+
+# === THE GUARDRAILS (Critical for AI Agents) ===
+# Panic safety - agents must handle errors, not crash
+unwrap_used = "deny"                # No Option::unwrap() - use ? or handle None
+expect_used = "deny"                # No Option::expect() - handle explicitly
+panic = "deny"                      # No explicit panic!() calls
+panic_in_result_fn = "deny"         # Functions returning Result shouldn't panic
+
+# Meta-linting - prevent AI from silencing warnings
+allow_attributes = "deny"           # THE "NO CHEATING" RULE - can't use #[allow(...)]
+allow_attributes_without_reason = "deny"  # If you DO allow, document why
+
+# Code hygiene - no debug leftovers
+dbg_macro = "deny"                  # No dbg!() in production
+todo = "deny"                       # No TODO markers (incomplete code)
+unimplemented = "deny"              # No unimplemented!() markers
+print_stdout = "deny"               # No println!() - use tracing
+print_stderr = "deny"               # No eprintln!() - use tracing
+
+# === ASYNC SAFETY (Critical for modern Rust) ===
+await_holding_lock = "deny"         # Prevents deadlocks with MutexGuard across .await
+large_futures = "warn"              # Catch huge async stack allocations
+
+# === PROCESS/MEMORY SAFETY ===
+exit = "deny"                       # Libraries shouldn't call std::process::exit()
+mem_forget = "deny"                 # Prevents leaks (Drop won't run)
+
+# === PERFORMANCE ===
+large_stack_arrays = "warn"         # Catch huge stack allocations
+large_types_passed_by_value = "warn"
+
+# === NECESSARY RELAXATIONS ===
+# These lints are too noisy or have too many false positives
+
+# Cargo group noise
+multiple_crate_versions = "allow"   # Often unavoidable with transitive deps
+
+# Pedantic overrides - style preferences
+missing_errors_doc = "allow"        # Too noisy without dedicated doc effort
+missing_panics_doc = "allow"        # Same
+doc_markdown = "allow"              # Style preference
+must_use_candidate = "allow"        # Very noisy
+similar_names = "allow"             # False positives with domain terms
+too_many_lines = "allow"            # Subjective - use clippy.toml threshold instead
+module_name_repetitions = "allow"   # Common pattern: foo::FooBar
+items_after_statements = "allow"    # Style preference
+uninlined_format_args = "allow"     # Minor style
+return_self_not_must_use = "allow"  # Builder pattern compatibility
+default_trait_access = "allow"      # Style preference
+redundant_closure_for_method_calls = "allow"  # Closure often clearer
+
+# Bool parameters - sometimes legitimately needed
+struct_excessive_bools = "allow"
+fn_params_excessive_bools = "allow"
+
+# Cast lints - too many false positives in practice
+cast_possible_truncation = "allow"
+cast_sign_loss = "allow"
+cast_precision_loss = "allow"
+cast_possible_wrap = "allow"
+
+# Async patterns
+unused_async = "allow"              # API consistency sometimes requires async
+
+# Match ergonomics
+match_same_arms = "allow"           # Sometimes explicit arms are clearer
+
+# Let-else syntax preference
+manual_let_else = "allow"
+
+# Underscore bindings
+used_underscore_binding = "allow"
+no_effect_underscore_binding = "allow"
+
+# Option patterns
+ref_option_ref = "allow"
+ref_option = "allow"
+
+# String patterns
+format_push_string = "allow"
+
+# File patterns
+case_sensitive_file_extension_comparisons = "allow"
+
+# API design choices
+unnecessary_wraps = "allow"         # Future-proofing sometimes needs Result
+needless_pass_by_value = "allow"    # API stability
+trivially_copy_pass_by_ref = "allow"
+
+# Error types
+result_large_err = "allow"          # Errors often need context
+
+# Nursery noise
+cognitive_complexity = "allow"      # Use clippy.toml threshold instead
