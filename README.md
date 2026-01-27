@@ -167,7 +167,13 @@ doc-valid-idents = ["LLM", "AI", "API", "CLI", "TUI", "AST", "MCP"]
 
 ### .cargo/deny.toml
 
-Supply chain security with [cargo-deny](https://github.com/EmbarkStudios/cargo-deny):
+Supply chain security with [cargo-deny](https://github.com/EmbarkStudios/cargo-deny). Install it first:
+
+```bash
+cargo install cargo-deny
+```
+
+Then create `.cargo/deny.toml`:
 
 ```toml
 [licenses]
@@ -179,6 +185,8 @@ wildcards = "deny"
 [advisories]
 vulnerability = "deny"
 ```
+
+Run with `cargo deny check`.
 
 ### CONSTITUTION.md
 
