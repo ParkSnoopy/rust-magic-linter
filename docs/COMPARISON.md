@@ -153,10 +153,10 @@ missing_docs = "warn"          # Force documentation
 
 ## The Combined Configuration
 
-rust-magic-linter's `standard` preset combines the best of both:
+rust-magic-linter offers separate profiles inspired by these configurations:
 
-- OpenAgentsInc's async safety and output control
-- Tenex's comprehensive lint groups
-- Carefully curated relaxations for practical use
+- `minimal` retains focused panic, lint-suppression, and hygiene guardrails.
+- `standard` adds OpenAgentsInc-style async safety and output control, pedantic warnings, and curated relaxations.
+- `maximum` adds Tenex-style broad lint groups at deny level, Rust and rustdoc checks, and an unsafe-code prohibition.
 
-See [skills/rust-magic-linter/assets/](../skills/rust-magic-linter/assets/) for the complete configurations.
+See [configuration and installation](CONFIGURATION.md) for the profile bundles and their Google-based constitutions with explicit policy overrides.

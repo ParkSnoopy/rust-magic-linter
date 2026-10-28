@@ -1,10 +1,9 @@
-# ============================================
 # CLIPPY CONFIGURATION
-# ============================================
-# Place this file in your project root (next to Cargo.toml)
-# These thresholds complement the lint configuration in Cargo.toml
+# Place next to Cargo.toml, alongside the selected profile's lint settings.
+# Thresholds configure enabled lints; they do not enable disabled lints.
+# Profiles share these defaults. Customize this copy for your project.
 
-# Complexity thresholds - prevent sprawling functions
+# Complexity thresholds (effective only when the corresponding lint is enabled)
 cognitive-complexity-threshold = 15
 type-complexity-threshold = 200
 too-many-lines-threshold = 100

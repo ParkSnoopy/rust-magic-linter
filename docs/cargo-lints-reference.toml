@@ -5,7 +5,7 @@
 # For workspace projects, use [workspace.lints.*] instead
 #
 # Based on analysis of 7 AI-assisted Rust projects
-# https://github.com/vicnaum/rust-magic-linter
+# https://github.com/ParkSnoopy/rust-magic-linter
 
 # ============================================
 # RUST LINTS
@@ -81,7 +81,7 @@ missing_panics_doc = "allow"        # Same
 doc_markdown = "allow"              # Style preference
 must_use_candidate = "allow"        # Very noisy
 similar_names = "allow"             # False positives with domain terms
-too_many_lines = "allow"            # Subjective - use clippy.toml threshold instead
+too_many_lines = "allow"            # Its clippy.toml threshold is inactive here.
 module_name_repetitions = "allow"   # Common pattern: foo::FooBar
 items_after_statements = "allow"    # Style preference
 uninlined_format_args = "allow"     # Minor style
@@ -131,4 +131,4 @@ trivially_copy_pass_by_ref = "allow"
 result_large_err = "allow"          # Errors often need context
 
 # Nursery noise
-cognitive_complexity = "allow"      # Use clippy.toml threshold instead
+cognitive_complexity = "allow"      # Its clippy.toml threshold is inactive here.

@@ -1,0 +1,17 @@
+# MINIMAL PROFILE
+# Focused guardrails. See CONSTITUTION.md for design guidance and overrides.
+# Add to Cargo.toml; use [workspace.lints.*] in workspace roots.
+# clippy.toml configures thresholds but does not enable lints.
+
+[lints.clippy]
+# Panic restrictions (stricter than Google's invariant-panic guidance)
+unwrap_used = "deny"              # Handle missing values and errors explicitly.
+expect_used = "deny"              # Handle missing values and errors explicitly.
+panic = "deny"                    # Do not call panic!() explicitly.
+
+# Lint suppression restrictions
+allow_attributes = "deny"         # Do not add #[allow(...)]; fix the cause.
+
+# Code hygiene
+dbg_macro = "deny"                # Remove dbg!() calls.
+todo = "deny"                     # Do not leave todo!() placeholders.

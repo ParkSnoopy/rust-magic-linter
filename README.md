@@ -32,7 +32,7 @@ The lint configurations in this repo tell Clippy *which* checks to enforce and a
 **Install the skill** (one-time setup):
 
 ```bash
-git clone https://github.com/vicnaum/rust-magic-linter.git
+git clone https://github.com/ParkSnoopy/rust-magic-linter.git
 cp -r rust-magic-linter/skills/rust-magic-linter ~/.claude/skills/
 # For Codex: ~/.codex/skills/
 # For Cursor: ~/.cursor/skills/
@@ -70,14 +70,14 @@ print_stderr = "deny"
 ### 3. Shell Script (interactive)
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/scripts/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-linter/main/scripts/install.sh)"
 ```
 
 Or specify a preset directly:
 
 ```bash
 # Options: minimal, standard, maximum
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/scripts/install.sh)" -- standard
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-linter/main/scripts/install.sh)" -- standard
 ```
 
 ---
@@ -86,10 +86,10 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/vicnaum/rust-magic-linte
 
 ```bash
 # Get the standard preset
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/skills/rust-magic-linter/assets/standard.toml >> Cargo.toml
+curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-linter/main/skills/rust-magic-linter/assets/standard/lint.toml >> Cargo.toml
 
 # Get clippy.toml for complexity thresholds
-curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/skills/rust-magic-linter/assets/clippy.toml -o clippy.toml
+curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-linter/main/skills/rust-magic-linter/assets/standard/clippy.toml -o clippy.toml
 ```
 
 ---
@@ -99,12 +99,14 @@ curl -sL https://raw.githubusercontent.com/vicnaum/rust-magic-linter/master/skil
 
 | Preset       | What it does                                                       | Best for                                    |
 | ------------ | ------------------------------------------------------------------ | ------------------------------------------- |
-| **minimal**  | Panic guards only: `unwrap`, `expect`, `panic`, `allow_attributes` | Quick safety net, minimal code changes      |
+| **minimal**  | Panic guards, lint-suppression checks, and debug cleanup | Quick safety net, minimal code changes      |
 | **standard** | Pedantic + async safety + output control                           | Most projects (recommended)                 |
-| **maximum**  | All lint groups at deny level                                      | Maximum strictness, critical infrastructure |
+| **maximum**  | Broad lint groups at deny level; unsafe code forbidden             | Projects accepting strict policy constraints |
 
 
-See [`skills/rust-magic-linter/assets/`](skills/rust-magic-linter/assets/) for the full configurations.
+Each profile has its own `lint.toml`, `clippy.toml`, and `CONSTITUTION.md`: [minimal](skills/rust-magic-linter/assets/minimal/), [standard](skills/rust-magic-linter/assets/standard/), and [maximum](skills/rust-magic-linter/assets/maximum/).  
+The constitutions follow [Google's Rust Style Guide](https://google.github.io/styleguide/rustguide.html), with explicit stricter profile overrides.  
+See [configuration and installation](docs/CONFIGURATION.md) for workspace setup, existing configurations, and profile differences.  
 
 For a fully documented reference config with explanations of every lint, see [`docs/cargo-lints-reference.toml`](docs/cargo-lints-reference.toml).
 
@@ -118,7 +120,7 @@ For a fully documented reference config with explanations of every lint, see [`d
 allow_attributes = "deny"
 ```
 
-This is the key insight: AI agents often bypass errors by adding `#[allow(clippy::...)]`. This lint makes that impossible—the AI must actually fix the code.
+This rejects `#[allow(...)]` attributes during Clippy checks; agents must fix findings rather than suppress them.  
 
 ### Panic Prevention
 
@@ -136,8 +138,8 @@ This is the key insight: AI agents often bypass errors by adding `#[allow(clippy
 
 | Lint                 | Why                                                          |
 | -------------------- | ------------------------------------------------------------ |
-| `await_holding_lock` | Prevents deadlocks when holding `MutexGuard` across `.await` |
-| `large_futures`      | Catches huge stack allocations in async code                 |
+| `await_holding_lock` | Flags synchronous lock guards held across `.await` in standard and maximum |
+| `large_futures`      | Flags oversized futures in maximum                          |
 
 
 ### Code Hygiene
@@ -190,7 +192,8 @@ Run with `cargo deny check`.
 
 ### CONSTITUTION.md
 
-A markdown file defining immutable laws for your codebase—AI reads it once and respects it as "supreme law". See [`skills/rust-magic-linter/assets/CONSTITUTION.md`](skills/rust-magic-linter/assets/CONSTITUTION.md).
+A profile-specific guide for AI agents and human reviewers, based on Google's Rust guidance with explicit local overrides.  
+Use the constitution from the same profile as your lint settings, such as [standard/CONSTITUTION.md](skills/rust-magic-linter/assets/standard/CONSTITUTION.md).  
 
 ---
 
