@@ -7,67 +7,9 @@
 
 ---
 
-## What is Clippy?
+## Quick Start
 
-[Clippy](https://github.com/rust-lang/rust-clippy) is Rust's official linter—a tool that analyzes your code and catches common mistakes, suggests improvements, and enforces best practices.
-
-**Install/Update Clippy:**
-```bash
-rustup component add clippy
-```
-
-**Run it:**
-```bash
-cargo clippy
-```
-
-The lint configurations in this repo tell Clippy *which* checks to enforce and at what severity level.
-
----
-
-## Quick Start (4 ways to install)
-
-### 1. Using Claude Code / Codex / Cursor (Recommended)
-
-**Install the skill** (one-time setup):
-
-```bash
-git clone https://github.com/ParkSnoopy/rust-magic-linter.git
-cp -r rust-magic-linter/skills/rust-magic-linter ~/.claude/skills/
-# For Codex: ~/.codex/skills/
-# For Cursor: ~/.cursor/skills/
-```
-
-**Then use it in any Rust project:**
-
-```
-/rust-magic-linter standard
-```
-
-Or just say "Add rust-magic-linter to this project" and it will ask which preset you want.
-
----
-
-### 2. Copy-Paste (5 seconds)
-
-Add this to your `Cargo.toml`:
-
-```toml
-[lints.clippy]
-pedantic = { level = "warn", priority = -1 }
-unwrap_used = "deny"
-expect_used = "deny"
-panic = "deny"
-allow_attributes = "deny"
-dbg_macro = "deny"
-todo = "deny"
-print_stdout = "deny"
-print_stderr = "deny"
-```
-
----
-
-### 3. Shell Script (interactive)
+### Shell Script (interactive)
 
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-linter/main/scripts/install.sh)"
@@ -75,21 +17,19 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-li
 
 Or specify a preset directly:
 
+- minimal
 ```bash
-# Options: minimal, standard, maximum
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-linter/main/scripts/install.sh)" -- minimal
+```
+
+- standard
+```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-linter/main/scripts/install.sh)" -- standard
 ```
 
----
-
-### 4. Download Config Directly
-
+- maximum
 ```bash
-# Get the standard preset
-curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-linter/main/skills/rust-magic-linter/assets/standard/lint.toml >> Cargo.toml
-
-# Get clippy.toml for complexity thresholds
-curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-linter/main/skills/rust-magic-linter/assets/standard/clippy.toml -o clippy.toml
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-linter/main/scripts/install.sh)" -- maximum
 ```
 
 ---
@@ -97,10 +37,10 @@ curl -fsSL https://raw.githubusercontent.com/ParkSnoopy/rust-magic-linter/main/s
 ## Presets
 
 
-| Preset       | What it does                                                       | Best for                                    |
-| ------------ | ------------------------------------------------------------------ | ------------------------------------------- |
-| **minimal**  | Panic guards, lint-suppression checks, and debug cleanup | Quick safety net, minimal code changes      |
-| **standard** | Pedantic + async safety + output control                           | Most projects (recommended)                 |
+| Preset       | What it does                                                       | Best for                                     |
+| ------------ | ------------------------------------------------------------------ | -------------------------------------------- |
+| **minimal**  | Panic guards, lint-suppression checks, and debug cleanup           | Quick safety net, minimal code changes       |
+| **standard** | Pedantic + async safety + output control                           | Most projects (recommended)                  |
 | **maximum**  | Broad lint groups at deny level; unsafe code forbidden             | Projects accepting strict policy constraints |
 
 
